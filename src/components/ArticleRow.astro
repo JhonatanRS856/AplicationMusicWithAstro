@@ -1,0 +1,10 @@
+<article>
+    <div class="flex w-full justify-between gap-2 mb-4 items-center">
+        <h4 class="text-lg ">{Astro.props.title}</h4>
+        <slot name="enlace"/>
+    </div>
+    
+    <div class={`w-full overflow-x-auto pb-3  ${Astro.props.class}`}>
+        <slot />
+    </div>
+</article>

@@ -1,0 +1,53 @@
+---
+const currentPath = Astro.url.pathname;
+
+const { href } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    `nav_link flex items-center gap-3 rounded-md
+    relative hover:bg-hoverColor
+    transition-all 
+    p-[0.45rem] pl-[0.65rem]
+    ${Astro.props.class}`,
+
+    {
+      "activeLink bg-hoverColor": currentPath === href,
+    },
+    {
+      "activeLink bg-hoverColor": href.includes("/playlist/"),
+    },
+  ]}
+>
+  <slot />
+</a>
+
+<style>
+  .nav_link {
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    &::before {
+      position: absolute;
+      content: "";
+      width: 4px;
+      height: 0;
+      left: 0;
+      background: #5157c6;
+      opacity: 0;
+      border-radius: 6px;
+      transition: all 0.25s ease-in-out;
+    }
+  }
+
+  .nav_link.activeLink {
+    &::before {
+      height: 50%;
+      opacity: 1;
+    }
+  }
+</style>

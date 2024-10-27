@@ -1,0 +1,58 @@
+---
+import type { Playlist } from "../lib/data"
+import PlayIcon from "../../public/svg/PlayIcon.astro"
+
+interface Props {
+  playlist: Playlist
+}
+
+const { playlist } = Astro.props
+const { id, cover, title, artists } = playlist
+
+const artistsString = artists.join(", ")
+---
+
+<article
+  class="flex flex-col group relative hover:bg-hoverColor shadow-lg hover:shadow-xl bg-bgDarkvariant rounded-md transition-all duration-300"
+>
+  
+
+  <a
+    href={`/playlist/${id}`}
+    class="playlist-item transition-all duration-300 flex relative p-2 overflow-hidden gap-2 pb-4 rounded-md w-36 flex-col"
+    transition:name=`playlist ${id} box`
+  >
+    <picture class="aspect-square w-full h-auto flex-none overflow-hidden relative">
+      <img
+        src={cover}
+        alt={`Cover of ${title} by ${artistsString}`}
+        class="object-cover w-full h-full rounded-md"
+        transition:name=`playlist ${id} image`
+      />
+
+            <div
+            class=`absolute right-2 bottom-2 translate-y-4 bg-primary p-2 flex rounded-full
+            transition-all duration-500 opacity-0
+            group-hover:translate-y-0 group-hover:opacity-100 group-hover:shadow-md
+            z-10
+            hover:scale-105
+        `
+        >
+            <PlayIcon class="size-7"/>
+        </div>
+    </picture>
+
+    <div class="flex flex-col h-[52px]">
+      <h4 class="text-white text-sm inlineText" transition:name=`playlist ${id} title`>
+        {title}
+      </h4>
+
+      <span
+        class="text-xs text-gray-400 brText"
+        transition:name=`playlist ${id} artists`
+      >
+        {artistsString}
+      </span>
+    </div>
+  </a>
+</article>

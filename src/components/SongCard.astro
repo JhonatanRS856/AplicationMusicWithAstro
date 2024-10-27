@@ -1,0 +1,83 @@
+---
+import { date } from "astro:schema";
+import ButtonPlay from "./ButtonPlay.astro";
+import PlayIcon from "../../public/svg/PlayIcon.astro";
+const { dataSong } = Astro.props;
+
+const { id,title, artists, imgSong } = dataSong;
+---
+
+<div class="song-card group" data-playlist={Astro.props.idPlaylist}>
+  <picture class="song-img relative overflow-hidden">
+    <img src={imgSong} alt={`${title} Background`} />
+    <ButtonPlay />
+  </picture>
+  <div class="rigthBox">
+    <div class="info-song" style=`background-image: linear-gradient(to bottom right, #47444cbc, #47444cb5), url(${imgSong});`>
+      <h3 class="inlineText">{title}</h3>
+      <p>{artists}</p>
+    </div>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .song-card {
+    @apply  rounded-md gap-3 bg-bgDark transition-all duration-300 hover:bg-hoverColor;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding:  0.4rem;
+    cursor: pointer;
+    box-shadow: 2px 3px 7px #00000099;
+
+    .song-img {
+      width: 52px;
+      height: 38px;
+      border-radius: inherit;
+    }
+
+    .rigthBox {
+      display: flex;
+      flex: 1;
+
+      .info-song {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: #47444c;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        background-size: cover;
+        background-position: center;
+
+        h3 {
+          @apply text-sm font-medium;
+
+        }
+
+        p {
+            @apply text-sm text-white text-opacity-40;
+
+            
+        }
+      }
+
+      .buttonMore {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        width: 0;
+        overflow: hidden;
+        transition: var(--transition);
+
+        span {
+          display: flex;
+        }
+      }
+    }
+  }
+</style>

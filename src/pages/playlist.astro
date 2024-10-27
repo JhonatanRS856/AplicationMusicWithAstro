@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ArticleRow from "../components/ArticleRow.astro";
+import PlaylistCard from "../components/PlaylistCard.astro";
+
+import {createdPlaylists} from '../lib/data';
+---
+
+<Layout title="Listas de Reproduccion">
+    <section class="flex flex-col w-full p-3">
+        <header class="flex items-center justify-between mb-4">
+            <h3 class="text-2xl">Listas de Reproducción</h3>
+            <div class="px-4 py-2 flex gap-2 text-nowrap justify-center items-center rounded-md bg-bgDarkvariant cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-hoverColor">
+                <svg class="size-6 opacity-80"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                <span class="text-sm text-white text-opacity-80">Crear Playlist</span>
+            </div>
+        </header>
+        <div class="flex gap-2 w-full mb-4 items-center">
+            {createdPlaylists.map((playlist) => 
+                <PlaylistCard playlist={playlist} />
+            )}
+        </div>
+       
+    </section>
+</Layout>

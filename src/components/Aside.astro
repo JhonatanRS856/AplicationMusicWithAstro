@@ -1,0 +1,98 @@
+---
+import IconoApp from "../../public/svg/iconoApp.astro"
+import MenuIcon from "../../public/svg/MenuIcon.astro"
+import CloseIcon from "../../public/svg/CloseIcon.astro"
+import ItemNav from "../components/ItemNav.astro"
+
+import Home from "../../public/svg/Home.astro"
+import CancionesIcon from "../../public/svg/CancionesIcon.astro"
+import IconPlaylist from "../../public/svg/IconPlaylist.astro"
+import IconConfi from "../../public/svg/IconConfi.astro"
+import IconDoor from "../../public/svg/IconDoor.astro"
+import IconFavoritos from "../../public/svg/IconFavoritos.astro"
+
+---
+
+
+<aside class="flex flex-col w-full row-[1/2] md:col-[1/2] bg-bgDark">
+    <div class="container-aside p-3 flex flex-col flex-1">
+        <header class="flex items-center justify-between md:pb-4">
+            <a href="/#" class="logo flex items-center gap-3 font-medium text-xl lg:text-3xl">
+                <IconoApp class="size-8 lg:size-10 text-primary"/>
+    
+                MusicPlayer
+            </a>
+    
+    
+            <button class="btn" id="abrirNav">
+                <MenuIcon class="size-8"/>
+            </button>
+        </header>
+    
+        <div class="containerNav flex flex-col flex-1 navFixed px-3 py-4 transition-all duration-300 opacity-0
+            fixed z-50 top-0 bottom-0 left-[-100%] bg-bgDarkvariant
+            w-full max-w-sm
+            md:px-0 md:py-0 
+            md:left-auto md:bg-transparent md:relative md:z-0 md:opacity-100">
+            <div class="w-full flex justify-between items-center mb-5 md:hidden">
+                <h3 class="text-2xl">Menu</h3>
+                <button class="btn" id="cerrarNav">
+                    <CloseIcon class="size-8"/>
+                </button>
+                
+            </div>
+    
+            
+
+            <nav class="nav flex flex-col gap-1 flex-1 w-full">
+                <ItemNav href="/">
+                    <Home />
+                    Pagina Principal
+                </ItemNav>
+                <ItemNav href="/canciones">
+                    <CancionesIcon />
+                    Canciones
+                </ItemNav>
+                <ItemNav href="/playlist">
+                    <IconPlaylist />
+                    Listas de Reproducción
+                </ItemNav>
+                <ItemNav href="/#">
+                    <IconFavoritos />
+                    Favoritos
+                </ItemNav>
+                <ItemNav href="/#" class="mt-auto">
+                    <IconConfi />
+                    Configuración
+                </ItemNav>
+                <ItemNav href="/#">
+                    <IconDoor />
+                    Salir
+                </ItemNav>
+            </nav>
+        </div>
+    </div>
+</aside>
+
+<style>
+    .navFixed.show{
+        left: 0;
+        opacity: 1;
+    }
+
+    
+</style>
+
+<script>
+    const btnAbrirNav = document.getElementById('abrirNav');
+    const btnCerrarNav = document.querySelector('#cerrarNav');
+    const containerNav =  document.querySelector('.containerNav');
+
+    btnAbrirNav.addEventListener('click', () => {
+        containerNav.classList.add('show');
+    });
+
+    btnCerrarNav.addEventListener('click', () => {
+        containerNav.classList.remove('show');
+    });
+</script>

@@ -1,0 +1,61 @@
+---
+import PlayIcon from "../../public/svg/PlayIcon.astro"
+import PrevIcon from "../../public/svg/PreviusIcon.astro"
+import NextIcon from "../../public/svg/NextIcon.astro"
+import VolumeFull from "../../public/svg/VolumeFull.astro"
+import ShuffleIcon from "../../public/svg/ShuffleIcon.astro"
+
+import ButtonPlayer from "../components/ButtonPlayer.astro"
+---
+
+
+<footer class="w-full col-span-1 md:col-span-2 bg-bgDarkvariant p-3">
+    <div class="w-full grid grid-cols-2 lg:grid-cols-3 gap-2">
+        <div class="flex col-span-2 lg:col-auto gap-3 items-center relative transition-all overflow-hidden duration-300 hiddenCurrentSong" id="containerDataPlayer">
+            <picture class="flex overflow-hidden w-14 rounded-md aspect-square flex-shrink-0 border-white border-opacity-40">
+                <img src="" alt="" id="imgSongPlayer">
+            </picture>
+            <div class="flex flex-col">
+                <h3 class="font-medium inlineText" id="titleSong">Say Goodbye</h3>
+                <p class="text-gray-400 text-sm inlineText" id="artistSong">Unknown Brain</p>
+            </div>
+        </div>
+        <div class="w-full flex flex-col items-center gap-1">
+            <div class="flex items-center gap-2">
+                <ButtonPlayer>
+                    <PrevIcon class="size-5"/>
+                </ButtonPlayer>
+                <ButtonPlayer>
+                    <PlayIcon class="size-7"/>
+                </ButtonPlayer>
+                <ButtonPlayer>
+                    <NextIcon class="size-5"/>
+                </ButtonPlayer>
+            </div>
+            <div class="flex w-full gap-1  justify-between text-sm text-white">
+                <span id="currenTimeSpan">--:--</span>
+                <div class="flex flex-1">
+
+                </div>
+                <span id="totalTimeSpan">--:--</span>
+            </div>
+        </div>
+        <div class="w-full flex items-center justify-end">
+            <ButtonPlayer>
+                <VolumeFull />
+            </ButtonPlayer>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .hiddenCurrentSong{
+        left: -100%;
+        opacity: 0;
+    }
+
+    .showCurrentSong{
+        left: 0;
+        opacity: 1;
+    }
+</style>

@@ -1,0 +1,170 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Search from "../../public/svg/Search.astro";
+
+import { Songs } from "../lib/data/MySongs";
+import SongCard from "../components/SongCard.astro";
+---
+
+<Layout title="MusicPlayer | Canciones">
+  <section class="flex flex-1 flex-col">
+    <header class="flex flex-col gap-2 md:flex-row w-full md:justify-between items-center p-3">
+      <form class="w-full md:max-w-[40%]">
+        <label
+          for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >Search</label
+        >
+        <div class="relative">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+          >
+            <Search class="text-gray-400" />
+          </div>
+          <input
+            type="search"
+            id="searchSongs"
+            class="block w-full p-4 ps-10 text-sm text-white text-opacity-80 border border-bgDarkLight bg-bgDarkvariant rounded-md outline-none"
+            placeholder="Buscar canciones"
+            required
+          />
+          <button
+            type="submit"
+            class="text-white absolute end-2.5 bottom-2.5 bg-primary transition-all duration-300 hover:saturate-150 font-medium rounded-md text-sm px-4 py-2"
+            >Buscar</button
+          >
+        </div>
+      </form>
+      <div class="flex flex-col items-center gap-2">
+        <div class="flex gap-2">
+
+        </div>
+
+        <button
+          id="dropdownDefaultButton"
+          data-dropdown-toggle="dropdown"
+          class="text-white bg-primary hover:saturate-150 outline-none font-medium rounded-md text-sm px-4 py-2 text-center inline-flex items-center"
+          type="button"
+          >Todos<svg
+            class="w-2.5 h-2.5 ms-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"></path>
+          </svg>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div
+          id="dropdown"
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-md shadow w-44"
+        >
+          <ul
+            class="py-2 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownDefaultButton"
+          >
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                ></a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Electro</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Rock Alternativo</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >Pop</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="containerAllSongs grid flex-1 w-full gap-2 md:grid-cols-2 p-3">
+      {Songs.map((songData) => <SongCard dataSong={songData} idPlaylist={songData.playlistsID[1]}/>)}
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { Songs, type Song } from "../lib/data/MySongs";
+  
+
+  const songsCards = document.querySelectorAll('.song-card');
+  const currenTimeSpan = document.getElementById('currenTimeSpan');
+  const totalTimeSpan = document.getElementById('totalTimeSpan');
+
+  const audio = document.getElementById('audioElement');
+  audio.volume = 0.6;
+
+  let currentIndex = 0;
+
+  songsCards.forEach((card ,index) => {
+    card.addEventListener('click', () => {
+      playSong(index);
+    });
+  });
+  
+  function formatTime(seconds) {
+    const secs = Math.floor(seconds % 60);
+    const minutes = Math.floor(seconds / 60);
+
+    return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+
+  function playSong(index) {
+    const song = Songs[index];
+
+    audio.src = song.music;
+
+    actualizarReproductor(song);
+
+    audio.load();
+    audio.play();
+  }
+
+  function actualizarReproductor(song) {
+    const containerDataPlayer = document.getElementById('containerDataPlayer')
+    const titleSong = document.getElementById('titleSong');
+    const artistName = document.getElementById('artistSong');
+    const imgPlayer = document.getElementById('imgSongPlayer');
+
+    titleSong.textContent = song.title;
+    artistName.textContent = song.artists;
+    imgPlayer.src = song.imgSong;
+    imgPlayer.alt = song.title;
+    containerDataPlayer.classList.replace('hiddenCurrentSong', 'showCurrentSong');
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    currenTimeSpan.textContent = formatTime(audio.currentTime)
+  })
+
+  audio.addEventListener('loadedmetadata', () => {
+    totalTimeSpan.textContent = formatTime(audio.duration);
+  })
+</script>

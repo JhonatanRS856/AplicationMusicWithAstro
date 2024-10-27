@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TableSongs from "../../components/TableSongs.astro";
+import { allPlaylists, songs, recommendedPlaylists } from "../../lib/data";
+import {Songs} from "../../lib/data/MySongs";
+
+import PlayIcon from "../../../public/svg/PlayIcon.astro";
+import ShuffleIcon from "../../../public/svg/ShuffleIcon.astro";
+
+//Sacamos la id de la ruta
+const {id} = Astro.params;
+
+//Para saber que playlist es la que estamos cargando comparando el id de la ruta con los id de todas las playlist en el array
+
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+const listaSongs = Songs.filter((song) => song.playlistsID[0] === parseInt(playlist.id));
+
+const {title, artists ,cover} = playlist;
+---
+
+<Layout title={`${title}`}>
+    <section class="flex flex-1 flex-col">
+        <header class="flex w-full" style=`background-image: linear-gradient(0deg, #00000050, #00000050), url(${cover});`>
+            <div class="flex p-3 flex-1 items-end gap-4 bg-black/10 backdrop-blur-lg">
+                <picture class="w-40 aspect-square shadow-lg">
+                    <img src={cover}
+                    class="rounded-md"
+                     alt={`Imagen de Playlist ${title}`}
+                     transition:name=`playlist ${playlist.id} image`
+                    >
+                </picture>
+                <div>
+                    <small class="text-gray-400">Playlist</small>
+                    <h1 class="text-white text-4xl mb-4" 
+                    transition:name={`playlist ${playlist.id} title`}>{title}</h1>
+                    <p class="text-sm" transition:name=`playlist ${playlist.id} artists`>{artists.join(', ')}</p>
+                    <small>{listaSongs.length} canciones, 3h aproximadamente</small>
+                </div>
+            </div>
+        </header>
+        <div class="flex w-full p-3">
+            <div class="flex gap-3 items-center">
+                <button class="flex p-3 rounded-full bg-primary transition-all duration-300 hover:scale-105">
+                    <PlayIcon class="size-8"/>
+                </button>
+                <button class="flex transition-all duration-300  hover:scale-105">
+                    <ShuffleIcon class="size-7"/>
+                </button>
+            </div>
+        </div>
+        <div class="flex px-3 pb-3 flex-1 overflow-x-auto">
+            <TableSongs songs={listaSongs}/>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    header{
+        background-size: cover;
+        background-position: center;
+    }
+</style>

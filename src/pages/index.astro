@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SongCard from '../components/SongCard.astro';
+import ArtistCard from '../components/ArtistCard.astro';
+import ArticleRow from '../components/ArticleRow.astro';
+import PosterSong from '../components/PosterSong.astro';
+import PlaylistCard from "../components/PlaylistCard.astro"
+import Greetings from "../components/Greetings.svelte"
+
+import IconFavoritos from '../../public/svg/IconFavoritos.astro';
+
+import artists from '../lib/data/artist';
+import { Songs } from '../lib/data/MySongs';
+import {recommendedPlaylists} from '../lib/data';
+
+function obtenerPrimerosElementos(array, cantidad = null){
+    return array.slice(0, cantidad);
+}
+
+const primerosCincoArtistas = obtenerPrimerosElementos(artists, 6);
+const primerasCanciones = obtenerPrimerosElementos(Songs, 4);
+---
+
+<Layout title="MusicPlayer | Inicio">
+	<section class="flex flex-col w-full p-3">
+        <header class="flex mb-4">
+            <Greetings />
+        </header>
+        <ArticleRow title="Playlist Recomendados" class="flex gap-2">
+            <a href="/#" slot="enlace" class="text-white bg-gradient-to-br from-primary to-primary font-medium rounded-md text-sm px-5 py-2.5 text-center">Ver Todos</a>
+            {recommendedPlaylists.map((playlist) => 
+                <PlaylistCard playlist={playlist}/>
+            )}
+        </ArticleRow>
+        
+        <section class="flex flex-col gap-2">
+            <ArticleRow title="Artistas Recomendados" class="flex gap-2">
+                {primerosCincoArtistas.map((data) => <ArtistCard name={data.name} imgArtist={data.imgArtist}/>)}
+            </ArticleRow>
+            
+            <div class="w-full grid md:grid-cols-3 md:grid-rows-2 gap-4 min-h-64 mb-4">
+                <div class="flex rounded-md cardBig md:col-span-2 md:row-span-2 overflow-hidden" id="posterContainer">
+                    <PosterSong name="Say Goodbye" img="../../public/img/songsImg/bodies.webp" artist="Unknown Brain"/>
+                </div>
+                <div class="flex p-3 rounded-md cardFavoritos md:col-[3/4] md:row-span-2 relative overflow-hidden">
+                    <a href="/#" class="flex flex-1 flex-col">
+                        <div class="flex flex-1 flex-col justify-between">
+                            <span class="text-3xl text-white">Favoritos</span>
+                            <p class="text-pretty">Explora tus canciones favoritas</p>
+                        </div>
+                    </a>
+                    <div class="absolute right-3 top-[50%] translate-y-[-50%] lg:translate-y-[0] lg:top-auto lg:bottom-7 lg:right-3 rotate-12 opacity-50">
+                        <IconFavoritos class="size-20 lg:size-44"/>
+                    </div>
+                </div>
+            </div>
+
+            <ArticleRow title="Escuchado recientemente" class="grid gap-2 md:grid-cols-2">
+                <a href="/#" slot="enlace" class="text-white bg-gradient-to-br from-primary to-primary font-medium rounded-md text-sm px-5 py-2.5 text-center">Ver Todos</a>
+                {primerasCanciones.map((data) => <SongCard 
+                    dataSong={data}
+                />)}
+            </ArticleRow>
+        </section>
+    </section>
+</Layout>
+<style>
+    .cardBig, .cardFavoritos{
+        box-shadow: 2px 3px 7px #0000009f;
+        text-shadow: 1px 2px 3px #0000001b;
+    }
+
+    
+
+    .cardFavoritos{
+        background-image: linear-gradient(20deg, #6e45e2 0%, #88d3ce 100%);
+    }
+</style>
+<script>
+    import { Songs } from "../lib/data/MySongs";
+
+
+    function templateComponent(songData){
+        const {title, imgSong, artists} = songData;
+
+        return `
+                <div class="flex w-full h-full overflow-hidden relative isolate">
+        <div class="flex flex-col w-full flex-1 p-3 bg-black bg-opacity-30">
+            <div>
+                <h3 class="text-3xl">${title}</h3>
+                <p class="text-sm text-white text-opacity-60">${artists}</p>
+            </div>
+            <button class="flex items-center gap-2 mt-auto w-fit rounded-md px-4 py-2 border border-white border-opacity-30 bg-white bg-opacity-10 backdrop-blur-sm text-white text-opacity-60
+                            transition-all hover:bg-opacity-20 hover:scale-105 duration-300 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" /></svg>
+                Escuchar
+            </button>
+        </div>
+        <div class="absolute w-full h-full left-0 top-0 z-[-1]">
+            <img src=${imgSong} alt=${title} Imagen>
+        </div>
+    </div>
+        `;
+    }
+
+    function songPosterAleatorio(){
+        const containerPoster = document.getElementById('posterContainer');
+        let indexRandom = Math.trunc(Math.random() * Songs.length - 1);
+
+        const song = Songs[indexRandom];
+
+
+        containerPoster.innerHTML = templateComponent(song);
+    }
+
+    songPosterAleatorio();
+</script>
